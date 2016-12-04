@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
-var getCSSFiles = require('../').getCSSFiles
+var getFiles = require('../').getFiles
 
 const argv = require('yargs').argv
+const file = argv._[0]
+const regex = /@import\s+(["'])(.*?)(["'])/gm
+const regexElement = 2
+const extensions = ['', '.css', '.sss']
 
-const files = getCSSFiles(argv._[0])
+const files = getFiles(file, regex, regexElement, extensions)
 
-files.forEach((file) => {
-  console.log(file)
-})
+console.log(files)

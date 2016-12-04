@@ -33,3 +33,14 @@ For Pug
       }))
       ....
 ```
+
+Or you can use this plugin for other files 
+
+```js
+    return gulp.src(`${src}/*.{pug}`)
+      .pipe($.changed(dist, {
+        hasChanged: require('gulp-changed-enhancements').compareLastModifiedTimeDeps(ownRegex,arrayOfExtensions),
+        extension: '.html'
+      }))
+      ....
+```

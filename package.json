@@ -25,5 +25,8 @@
   "license": "ISC",
   "peerDependencies": {
     "gulp-util": "^3.0.7"
+  },
+  "dependencies": {
+    "file-exists": "^2.0.0"
   }
 }
