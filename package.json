@@ -1,0 +1,29 @@
+{
+  "name": "gulp-changed-enhancements",
+  "version": "1.1.2",
+  "description": "Plugin for gulp-changed, provide custom comparators for CSS, JS (ES6), and Pug",
+  "keywords": [
+    "gulp-changed",
+    "custom comparator",
+    "custom comparators",
+    "css",
+    "js",
+    "pug",
+    "incremental build",
+    "gulp"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "csstree": "./bin/csstree.js",
+    "jstree": "./bin/jstree.js",
+    "pugtree": "./bin/pugtree.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "gulp-util": "^3.0.7"
+  }
+}
