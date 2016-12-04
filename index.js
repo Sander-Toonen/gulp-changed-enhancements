@@ -47,7 +47,7 @@ const getFiles = function getFiles (file, regex, regexElement, extensions) {
     return fileExistWithExtension(file, extensions)
   })
   files = files.filter((file) => file)
-  const bfiles = files.slice()
+  const bfiles = [...files]
   bfiles.forEach((bfile) => {
     let cfiles = getFiles(bfile, regex, regexElement, extensions)
     if (cfiles) {
