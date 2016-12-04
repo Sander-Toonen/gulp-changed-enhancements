@@ -51,16 +51,13 @@ const getFiles = function getFiles (file, regex, regexElement, extensions) {
   bfiles.forEach((bfile) => {
     let cfiles = getFiles(bfile, regex, regexElement, extensions)
     if (cfiles) {
-      cfiles.forEach((cfile) => {
-        files[files.length] = cfile
-      })
+      files = [...files, ...cfiles]
     }
   })
   if (files.length > 0) {
     return files
-  } else {
-    return undefined
   }
+  return undefined
 }
 
 const compareLastModifiedTimeWithDeps = (regex, regexElement, extensions) => {
