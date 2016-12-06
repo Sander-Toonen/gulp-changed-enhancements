@@ -15,9 +15,11 @@ const fileExistWithExtension = (options) => {
   options.extensions.push('')
   let fileWithExt = null
   options.index.forEach((indexFile) => {
-    if (fs.statSync(options.file).isDirectory()) {
-      options.file = path.join(options.file, indexFile)
-    }
+    try {
+      if (fs.statSync(options.file).isDirectory()) {
+        options.file = path.join(options.file, indexFile)
+      }
+    } catch (err) {}
   })
   options.extensions.forEach((extension) => {
     options.prefix.forEach((prefix) => {
@@ -25,6 +27,7 @@ const fileExistWithExtension = (options) => {
       const basename = path.basename(`${options.file}`)
       if (fs.existsSync(`${dirname}/${prefix}${basename}${extension}`)) {
         fileWithExt = `${dirname}/${prefix}${basename}${extension}`
+        return
       }
     })
   })
