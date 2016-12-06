@@ -1,6 +1,6 @@
 {
   "name": "gulp-changed-enhancements",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Plugin for gulp-changed, provide custom comparators for CSS, JS (ES6), and Pug",
   "keywords": [
     "gulp-changed",
@@ -27,6 +27,5 @@
     "gulp-util": "^3.0.7"
   },
   "dependencies": {
-    "file-exists": "^2.0.0"
   }
 }
