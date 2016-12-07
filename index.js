@@ -71,10 +71,10 @@ const getFiles = function getFiles (options) {
       extensions
     })
   })
-  files = files.filter((file) => file)
+  files = files.filter((file) => { return file })
   const bfiles = [...files]
   bfiles.forEach((bfile) => {
-    let cfiles = getFiles({
+    const cfiles = getFiles({
       file: bfile,
       prefix,
       index,
