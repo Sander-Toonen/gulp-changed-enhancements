@@ -5,7 +5,6 @@ const path = require('path')
 const gutil = require('gulp-util')
 
 const fileExistWithExtension = (options) => {
-  options.file
   options.prefix = options.prefix || []
   options.prefix.push('_')
   options.prefix.push('')
@@ -26,8 +25,7 @@ const fileExistWithExtension = (options) => {
       const dirname = path.dirname(options.file)
       const basename = path.basename(`${options.file}`)
       if (fs.existsSync(`${dirname}/${prefix}${basename}${extension}`)) {
-        fileWithExt = `${dirname}/${prefix}${basename}${extension}`
-        return
+        fileWithExt = path.normalize(`${dirname}/${prefix}${basename}${extension}`)
       }
     })
   })
@@ -47,8 +45,7 @@ const fsOperationFailed = (stream, sourceFile, err) => {
   return err
 }
 
-const getFiles = function getFiles (options) {
-  const file = options.file
+const getFiles = function getFiles (file, options) {
   const prefix = options.prefix
   const index = options.index
   const extensions = options.extensions
@@ -74,8 +71,7 @@ const getFiles = function getFiles (options) {
   files = files.filter((file) => { return file })
   const bfiles = [...files]
   bfiles.forEach((bfile) => {
-    const cfiles = getFiles({
-      file: bfile,
+    const cfiles = getFiles(bfile, {
       prefix,
       index,
       extensions,
@@ -97,13 +93,12 @@ const compareLastModifiedTimeWithDeps = (options) => {
   const regexElement = options.regexElement
   const extensions = options.extensions
   return (stream, cb, sourceFile, targetPath) => {
-    fs.stat(targetPath, function (err, targetStat) {
+    fs.stat(targetPath, (err, targetStat) => {
       if (!fsOperationFailed(stream, sourceFile, err) && sourceFile.stat) {
         if (sourceFile.stat.mtime > targetStat.mtime) {
           stream.push(sourceFile)
         } else {
-          const files = getFiles({
-            file: sourceFile.path,
+          const files = getFiles(sourceFile.path, {
             regex,
             regexElement,
             extensions
@@ -135,7 +130,7 @@ module.exports.compareLastModifiedTimeCSSDeps = compareLastModifiedTimeWithDeps(
 })
 module.exports.compareLastModifiedTimeJSDeps = compareLastModifiedTimeWithDeps({
   extensions: ['.js', '.jsx'],
-  regex: /import\s+.+\s+from\s+(["'])(.*?)(["'])/gm,
+  regex: /import.+(["'])(.*?)(["'])/gm,
   regexElement: 2
 })
 module.exports.compareLastModifiedTimePugDeps = compareLastModifiedTimeWithDeps({
