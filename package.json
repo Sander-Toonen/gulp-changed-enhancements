@@ -27,6 +27,6 @@
     "gulp-util": "^3.0.7"
   },
   "dependencies": {
-    "yargs": "^7.1.0"
+    "yargs": "^8.0.1"
   }
 }
