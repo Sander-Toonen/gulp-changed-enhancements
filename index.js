@@ -33,18 +33,6 @@ const fileExistWithExtension = (options) => {
   return fileWithExt
 }
 
-const fsOperationFailed = (stream, sourceFile, err) => {
-  if (err) {
-    if (err.code !== 'ENOENT') {
-      stream.emit('error', new gutil.PluginError('gulp-changed', err, {
-        fileName: sourceFile.path
-      }))
-    }
-    stream.push(sourceFile)
-  }
-  return err
-}
-
 const getFiles = function getFiles (file, options) {
   const prefix = options.prefix
   const index = options.index
@@ -68,7 +56,7 @@ const getFiles = function getFiles (file, options) {
       extensions
     })
   })
-  files = files.filter((file) => { return file })
+  files = files.filter((file) => file)
   const bfiles = [...files]
   bfiles.forEach((bfile) => {
     const cfiles = getFiles(bfile, {
@@ -88,14 +76,14 @@ const getFiles = function getFiles (file, options) {
   return undefined
 }
 
-const compareLastModifiedTimeWithDeps = (options) => {
+const compareLastModifiedTimeWithDeps = ( options) => {
   const regex = options.regex
   const regexElement = options.regexElement
   const extensions = options.extensions
-  return (stream, cb, sourceFile, targetPath) => {
-    fs.stat(targetPath, (err, targetStat) => {
-      if (!fsOperationFailed(stream, sourceFile, err) && sourceFile.stat) {
-        if (sourceFile.stat.mtime > targetStat.mtime) {
+  return function(stream, sourceFile, targetPath) {
+    return stat(targetPath)
+      .then(targetStat => {
+        if (sourceFile.stat && sourceFile.stat.mtime > targetStat.mtime) {
           stream.push(sourceFile)
         } else {
           const files = getFiles(sourceFile.path, {
@@ -115,9 +103,7 @@ const compareLastModifiedTimeWithDeps = (options) => {
             }
           }
         }
-      }
-      cb()
-    })
+      })
   }
 }
 
@@ -138,4 +124,3 @@ module.exports.compareLastModifiedTimePugDeps = compareLastModifiedTimeWithDeps(
   regex: /(include|extends?)\s(.*)/gm,
   regexElement: 2
 })
-
