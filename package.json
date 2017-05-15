@@ -1,6 +1,6 @@
 {
   "name": "gulp-changed-enhancements",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Plugin for gulp-changed, provide custom comparators for CSS, JS (ES6), and Pug",
   "keywords": [
     "gulp-changed",
@@ -19,7 +19,7 @@
   "bin": {
     "csstree": "./bin/csstree.js",
     "jstree": "./bin/jstree.js",
-    "pugtree": "./bin/pugtree.js"
+    "nunjuckstree": "./bin/nunjuckstree.js"
   },
   "author": "",
   "license": "ISC",
