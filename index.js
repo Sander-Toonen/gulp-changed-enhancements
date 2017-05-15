@@ -38,13 +38,12 @@ const getFiles = function getFiles (file, options) {
   const index = options.index
   const extensions = options.extensions
   const regex = options.regex
-  const regexElement = options.regexElement
   let files = []
   const fileDirname = path.dirname(file)
   const data = fs.readFileSync(file, 'utf8')
   let result = regex.exec(data)
   while (result) {
-    files.push(result[regexElement])
+    files.push(result[1])
     result = regex.exec(data)
   }
   files = files.map((file) => {
@@ -63,8 +62,7 @@ const getFiles = function getFiles (file, options) {
       prefix,
       index,
       extensions,
-      regex,
-      regexElement
+      regex
     })
     if (cfiles) {
       files = [...files, ...cfiles]
@@ -78,7 +76,6 @@ const getFiles = function getFiles (file, options) {
 
 const compareLastModifiedTimeWithDeps = ( options) => {
   const regex = options.regex
-  const regexElement = options.regexElement
   const extensions = options.extensions
   return function(stream, sourceFile, targetPath) {
     return stat(targetPath)
@@ -88,7 +85,6 @@ const compareLastModifiedTimeWithDeps = ( options) => {
         } else {
           const files = getFiles(sourceFile.path, {
             regex,
-            regexElement,
             extensions
           })
           if (files) {
@@ -111,16 +107,13 @@ module.exports.getFiles = getFiles
 module.exports.compareLastModifiedTimeWithDeps = compareLastModifiedTimeWithDeps
 module.exports.compareLastModifiedTimeCSSDeps = compareLastModifiedTimeWithDeps({
   extensions: ['.css', '.sss'],
-  regex: /@import\s+(["'])(.*?)(["'])/gm,
-  regexElement: 2
+  regex: /@import\s+(?:["'])(.*?)(?:["'])/gm
 })
 module.exports.compareLastModifiedTimeJSDeps = compareLastModifiedTimeWithDeps({
   extensions: ['.js', '.jsx'],
-  regex: /import.+(["'])(.*?)(["'])/gm,
-  regexElement: 2
+  regex: /import.+(?:["'])(.*?)(?:["'])/gm
 })
-module.exports.compareLastModifiedTimePugDeps = compareLastModifiedTimeWithDeps({
-  extensions: ['.pug', '.jade'],
-  regex: /(include|extends?)\s(.*)/gm,
-  regexElement: 2
+module.exports.compareLastModifiedTimeNunjucksDeps = compareLastModifiedTimeWithDeps({
+  extensions: ['.njk'],
+  regex: /{%\s+extends\s+(?:["'])(.*?)(?:["'])\s+%}/gm
 })
